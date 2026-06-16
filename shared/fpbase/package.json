@@ -1,0 +1,13 @@
+{
+  "name": "@flarepoint/base",
+  "version": "0.1.0",
+  "description": "Shared substrate for Flarepoint plugins: provenance, file-state, modes, queue, injection, statusline, host manifests. No runtime deps — plugins symlink src/ in at hooks/_fpbase.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  }
+}

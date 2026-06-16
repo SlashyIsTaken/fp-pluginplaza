@@ -1,0 +1,9 @@
+# reference copies of the pre-monorepo repos — kept locally until we're happy, never published
+.legacy/
+
+# dev tooling
+node_modules/
+
+# local plugin state (per-project flarepoint dirs)
+.flarepoint/
+.claude/settings.local.json
