@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "flarepoint",
-  "description": "Flarepoint — a hub of small, behavioural Claude Code plugins that make the AI's epistemic state explicit and persistent. Built on one shared substrate (fp-base).",
+  "description": "Flarepoint Plugin Plaza (fp) — a plaza of small, behavioural Claude Code plugins that make the AI's epistemic state explicit and persistent, never steering it. Built on one shared substrate (fp-base). https://github.com/SlashyIsTaken/fp-pluginplaza",
   "owner": {
     "name": "Flarepoint",
     "url": "https://github.com/SlashyIsTaken"

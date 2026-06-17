@@ -2,7 +2,7 @@
   "name": "fp-plugins",
   "version": "0.1.0",
   "private": true,
-  "description": "Flarepoint plugin hub — a Claude Code marketplace of behavioural plugins built on a shared substrate.",
+  "description": "Flarepoint Plugin Plaza (fp) — a Claude Code marketplace of behavioural plugins built on a shared substrate. https://github.com/SlashyIsTaken/fp-pluginplaza",
   "license": "MIT",
   "engines": {
     "node": ">=18"

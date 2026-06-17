@@ -1,10 +1,14 @@
-# Flarepoint
+# Flarepoint Plugin Plaza
 
-A hub of small, **behavioural** Claude Code plugins: tools that make the AI's
+The **fp** marketplace, hosted at
+[`SlashyIsTaken/fp-pluginplaza`](https://github.com/SlashyIsTaken/fp-pluginplaza).
+
+A plaza of small, **behavioural** Claude Code plugins: tools that make the AI's
 epistemic state explicit and persistent, without ever steering what it decides.
 
-The whole hub installs as one Claude Code marketplace. Each plugin is a directory
-under [`plugins/`](./plugins); they all share one substrate
+The whole plaza installs as one Claude Code marketplace. Every plugin carries the
+`fp-` prefix (for **F**lare**p**oint) and lives in its own directory under
+[`plugins/`](./plugins); they all share one substrate
 ([`shared/fpbase`](./shared/fpbase)) so they look and behave the same way and
 reuse the same tested code.
 
