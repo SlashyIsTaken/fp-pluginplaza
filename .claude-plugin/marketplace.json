@@ -18,6 +18,12 @@
       "source": "./plugins/fp-bump",
       "description": "Sizes each commit (patch, minor, or major) and remembers the largest, then applies one version bump when you release. The model judges the size; you confirm. Suggests by default; set auto to apply without asking.",
       "category": "productivity"
+    },
+    {
+      "name": "fp-recap",
+      "source": "./plugins/fp-recap",
+      "description": "Resume a previous session. Saves a structured note of where you left off (goal, files changed, commands run) plus the likely steps ahead, and surfaces it at the start of the next session so you can continue without re-explaining. It proposes the next steps and waits; it never starts work on its own.",
+      "category": "productivity"
     }
   ]
 }

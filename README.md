@@ -66,6 +66,29 @@ release.
 
 </details>
 
+<details>
+<summary><b>fp-recap</b>: resume a previous session, with the steps ahead laid out</summary>
+
+[fp-recap](./plugins/fp-recap) is about picking a session back up. The built-in
+summary is one-off prose that disappears; fp-recap saves a resume note that
+survives, so your next session opens with where you left off and what comes next.
+
+- **Captures where you left off.** After each response, fp-recap reads the
+  session's tool log and saves a short, structured note: the goal you set, the
+  files changed, and the commands run.
+- **Lays out the steps ahead.** It also captures the likely next moves, taken
+  from what you said you'd do next, or your last unfinished request as the anchor
+  to continue from.
+- **Resumes next time.** At the first prompt of your next session in that
+  project, the note is surfaced once, so you can carry on without re-explaining.
+- **Stays local.** The note lives in the project's git-ignored personal store, as
+  a readable file. Ask for it any time with `/fp-recap:mode show`.
+- **Modes:** `on` (concise note, the default), `verbose` (more files and commands,
+  plus files read), `off`. Control with `/fp-recap:mode`. It proposes the next
+  steps and waits; it never starts work on its own.
+
+</details>
+
 ## How it's built
 
 ```
