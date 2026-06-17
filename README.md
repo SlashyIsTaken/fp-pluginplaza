@@ -1,6 +1,6 @@
 # Flarepoint
 
-A hub of small, **behavioural** Claude Code plugins — tools that make the AI's
+A hub of small, **behavioural** Claude Code plugins: tools that make the AI's
 epistemic state explicit and persistent, without ever steering what it decides.
 
 The whole hub installs as one Claude Code marketplace. Each plugin is a directory
@@ -22,7 +22,7 @@ stay quiet instead of erroring.
 
 | Plugin | What it does |
 |---|---|
-| [**fp-honesty**](./plugins/fp-honesty) | Tags load-bearing claims with their basis — verified / inferred / recalled / guess — and ends each response with a one-line tally. Pure annotation; it never changes what the model does. |
+| [**fp-honesty**](./plugins/fp-honesty) | Tags load-bearing claims with their basis — verified / inferred / recalled / guess — and ends each response with a one-line tally. Pure annotation to give the user an idea of how many claims are actually grounded, because AI will always represent its findings with a confident tone. It never changes what the model does. |
 
 _More on the way (a version-bumper, memory, profiles, …)._
 
@@ -47,7 +47,7 @@ fp-pluginplaza/
 **Base sharing is a symlink, not a build step.** Each plugin symlinks
 `shared/fpbase/src` into its own `hooks/_fpbase`. When Claude Code installs a
 plugin from this repo it dereferences that symlink and copies the base content
-into the plugin's cache, so an installed plugin is fully self-contained — there
+into the plugin's cache, so an installed plugin is fully self-contained. There
 is no build, no vendoring, and no chance of a stale copy. The filesystem is the
 single source of truth.
 
