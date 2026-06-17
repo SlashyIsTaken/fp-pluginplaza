@@ -48,61 +48,79 @@ test('isGitCommit matches real commits, ignores look-alikes', () => {
   assert.equal(bump.isGitCommit(''), false);
 });
 
-// --- pure decision ---------------------------------------------------------
+// --- ratchet & SemVer math -------------------------------------------------
 
-const baseCase = {
-  command: 'git commit -m "x"',
-  mode: 'suggest',
-  versionFile: { name: 'package.json', version: '1.0.0' },
-  headVersion: '1.0.0',
-  hasStagedChanges: true,
-  hasHead: true,
-};
-
-test('decide denies a staged commit with an unchanged version', () => {
-  const r = bump.decide(baseCase);
-  assert.equal(r.decision, 'deny');
-  assert.match(r.reason, /fp-bump:/);
-  assert.match(r.reason, /package\.json/);
+test('ratchet keeps the highest level and floors unknown input to none', () => {
+  assert.equal(bump.ratchet('none', 'patch'), 'patch');
+  assert.equal(bump.ratchet('minor', 'patch'), 'minor'); // can't climb down
+  assert.equal(bump.ratchet('patch', 'major'), 'major');
+  assert.equal(bump.ratchet('major', 'minor'), 'major');
+  assert.equal(bump.ratchet('bogus', 'patch'), 'patch'); // unknown treated as none
+  assert.equal(bump.ratchet('minor', 'bogus'), 'minor');
+  assert.equal(bump.ratchet('none', 'none'), 'none');
 });
 
-test('decide allows once the version has moved past HEAD', () => {
-  const r = bump.decide({ ...baseCase, versionFile: { name: 'package.json', version: '1.1.0' } });
+test('nextVersion bumps one level and rejects non-SemVer', () => {
+  assert.equal(bump.nextVersion('1.2.3', 'patch'), '1.2.4');
+  assert.equal(bump.nextVersion('1.2.3', 'minor'), '1.3.0');
+  assert.equal(bump.nextVersion('1.2.3', 'major'), '2.0.0');
+  assert.equal(bump.nextVersion('0.1.0', 'minor'), '0.2.0');
+  assert.equal(bump.nextVersion('v2.3.4', 'patch'), '2.3.5'); // v-prefix tolerated
+  assert.equal(bump.nextVersion('1.2.3', 'none'), null);
+  assert.equal(bump.nextVersion('nope', 'patch'), null);
+});
+
+// --- pure commit gate ------------------------------------------------------
+
+const gateCase = {
+  command: 'git commit -m "x"',
+  mode: 'suggest',
+  hasVersionFile: true,
+  hasStagedChanges: true,
+  hasHead: true,
+  pending: 'none',
+  stagedTree: 'tree-abc',
+  assessedTree: '',
+  cliPath: '/p/cli.js',
+};
+
+test('decide denies a commit whose staged changes are not sized yet', () => {
+  const r = bump.decide(gateCase);
+  assert.equal(r.decision, 'deny');
+  assert.match(r.reason, /fp-bump:/);
+  assert.match(r.reason, /assess <level>/);
+  assert.match(r.reason, /\/p\/cli\.js/); // the resolved cli path is handed to the model
+});
+
+test('decide allows once this exact staged content has been sized', () => {
+  const r = bump.decide({ ...gateCase, assessedTree: 'tree-abc' });
   assert.equal(r.decision, 'allow');
 });
 
-test('decide allows when off, non-commit, no staged changes, no version file, or first commit', () => {
-  assert.equal(bump.decide({ ...baseCase, mode: 'off' }).decision, 'allow');
-  assert.equal(bump.decide({ ...baseCase, command: 'git status' }).decision, 'allow');
-  assert.equal(bump.decide({ ...baseCase, hasStagedChanges: false }).decision, 'allow');
-  assert.equal(bump.decide({ ...baseCase, versionFile: null }).decision, 'allow');
-  assert.equal(bump.decide({ ...baseCase, hasHead: false }).decision, 'allow');
+test('decide allows when off, non-commit, no staged, no version file, first commit, or maxed', () => {
+  assert.equal(bump.decide({ ...gateCase, mode: 'off' }).decision, 'allow');
+  assert.equal(bump.decide({ ...gateCase, command: 'git status' }).decision, 'allow');
+  assert.equal(bump.decide({ ...gateCase, hasStagedChanges: false }).decision, 'allow');
+  assert.equal(bump.decide({ ...gateCase, hasVersionFile: false }).decision, 'allow');
+  assert.equal(bump.decide({ ...gateCase, hasHead: false }).decision, 'allow');
+  assert.equal(bump.decide({ ...gateCase, pending: 'major' }).decision, 'allow'); // can't climb higher
 });
 
-test('decide reason reflects the mode (auto applies, suggest confirms)', () => {
-  assert.match(bump.decide({ ...baseCase, mode: 'auto' }).reason, /auto mode/);
-  assert.match(bump.decide(baseCase).reason, /wait for confirmation/);
-});
+// --- cli: assess, release, reset -------------------------------------------
 
-// --- cli -------------------------------------------------------------------
-
-test('cli switches and reports mode in an isolated config home', () => {
+function withProject(fn) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'fpb-home-'));
+  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'fpb-proj-'));
   const prevHome = process.env.FLAREPOINT_CONFIG_HOME;
   const prevCwd = process.cwd();
   process.env.FLAREPOINT_CONFIG_HOME = home;
-  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'fpb-proj-'));
   fs.mkdirSync(path.join(project, '.git'), { recursive: true });
+  fs.writeFileSync(path.join(project, 'package.json'), '{\n  "version": "1.0.0"\n}\n');
   process.chdir(project);
+  delete require.cache[require.resolve('../hooks/cli')];
+  const cli = require('../hooks/cli');
   try {
-    delete require.cache[require.resolve('../hooks/cli')];
-    const cli = require('../hooks/cli');
-    assert.equal(cli.run('status'), 'fp-bump: suggest'); // default
-    assert.equal(cli.run('auto'), 'fp-bump: auto');
-    assert.equal(cli.run('status'), 'fp-bump: auto');
-    assert.equal(cli.run('off'), 'fp-bump: off');
-    assert.equal(cli.run('on'), 'fp-bump: suggest');
-    assert.match(cli.run('help'), /\/fp-bump:mode/);
+    fn(cli);
   } finally {
     process.chdir(prevCwd);
     if (prevHome === undefined) delete process.env.FLAREPOINT_CONFIG_HOME;
@@ -110,6 +128,40 @@ test('cli switches and reports mode in an isolated config home', () => {
     fs.rmSync(home, { recursive: true, force: true });
     fs.rmSync(project, { recursive: true, force: true });
   }
+}
+
+test('cli mode switches and reports', () => {
+  withProject((cli) => {
+    assert.equal(cli.run('status'), 'fp-bump: suggest · nothing pending'); // default
+    assert.equal(cli.run('auto'), 'fp-bump: auto');
+    assert.equal(cli.run('off'), 'fp-bump: off');
+    assert.equal(cli.run('on'), 'fp-bump: suggest');
+    assert.match(cli.run('help'), /\/fp-bump:release/);
+  });
+});
+
+test('cli assess ratchets the pending level and never lowers it', () => {
+  withProject((cli) => {
+    assert.match(cli.run('assess', 'patch'), /pending release is now patch/);
+    assert.match(cli.run('assess', 'minor'), /pending release is now minor/);
+    assert.match(cli.run('assess', 'patch'), /pending release is now minor/); // stays minor
+    assert.equal(cli.run('status'), 'fp-bump: suggest · minor pending');
+    assert.match(cli.run('assess', 'sideways'), /needs a level/);
+  });
+});
+
+test('cli release sizes one bump from the pending level, reset clears it', () => {
+  withProject((cli) => {
+    assert.match(cli.run('release'), /nothing pending/);
+    cli.run('assess', 'minor');
+    const out = cli.run('release');
+    assert.match(out, /1\.0\.0 -> 1\.1\.0/);
+    assert.match(out, /Propose this to the user/); // suggest mode waits
+    cli.run('auto');
+    assert.match(cli.run('release'), /Set "version" to 1\.1\.0/); // auto applies
+    assert.equal(cli.run('reset').includes('cleared'), true);
+    assert.match(cli.run('release'), /nothing pending/);
+  });
 });
 
 // --- integration: real git repo, real precommit.js -------------------------
@@ -134,7 +186,16 @@ function runPrecommit(repo, command, home) {
   return r.stdout || '';
 }
 
-test('precommit denies an un-bumped commit, allows once bumped', { skip: !hasGit() }, () => {
+function runCli(repo, args, home) {
+  const r = spawnSync('node', [path.join(__dirname, '..', 'hooks', 'cli.js'), ...args], {
+    cwd: repo,
+    encoding: 'utf8',
+    env: { ...process.env, FLAREPOINT_CONFIG_HOME: home },
+  });
+  return (r.stdout || '').trim();
+}
+
+test('precommit denies until the staged changes are sized, then allows', { skip: !hasGit() }, () => {
   const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'fpb-git-'));
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'fpb-h-'));
   try {
@@ -146,18 +207,24 @@ test('precommit denies an un-bumped commit, allows once bumped', { skip: !hasGit
     git(['add', '.'], repo);
     git(['commit', '-q', '-m', 'initial'], repo);
 
-    // a code change, staged, version untouched -> deny
+    // a code change, staged, not sized yet -> deny with an assess instruction
     fs.writeFileSync(path.join(repo, 'a.js'), 'module.exports = 2;\n');
     git(['add', 'a.js'], repo);
-    const denied = runPrecommit(repo, 'git commit -m "change"', home);
+    const denied = runPrecommit(repo, 'git commit -m "feature"', home);
     assert.match(denied, /"permissionDecision":"deny"/);
-    assert.match(denied, /fp-bump:/);
+    assert.match(denied, /assess <level>/);
 
-    // now bump the version and stage it -> allow (empty output)
-    fs.writeFileSync(path.join(repo, 'package.json'), '{\n  "version": "1.1.0"\n}\n');
-    git(['add', 'package.json'], repo);
-    const allowed = runPrecommit(repo, 'git commit -m "change"', home);
-    assert.equal(allowed.trim(), '');
+    // size it, and the version file stays untouched (no bump at commit time)
+    assert.match(runCli(repo, ['assess', 'minor'], home), /pending release is now minor/);
+    assert.match(fs.readFileSync(path.join(repo, 'package.json'), 'utf8'), /"version": "1\.0\.0"/);
+
+    // same staged content, now sized -> allow (empty output)
+    assert.equal(runPrecommit(repo, 'git commit -m "feature"', home).trim(), '');
+
+    // stage a further change -> the new content isn't sized, so deny again
+    fs.writeFileSync(path.join(repo, 'b.js'), 'module.exports = 3;\n');
+    git(['add', 'b.js'], repo);
+    assert.match(runPrecommit(repo, 'git commit -m "more"', home), /"permissionDecision":"deny"/);
   } finally {
     fs.rmSync(repo, { recursive: true, force: true });
     fs.rmSync(home, { recursive: true, force: true });

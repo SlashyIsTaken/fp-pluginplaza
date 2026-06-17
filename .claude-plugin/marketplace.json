@@ -16,7 +16,7 @@
     {
       "name": "fp-bump",
       "source": "./plugins/fp-bump",
-      "description": "Sizes a SemVer version bump to the magnitude of your changes at commit time — the model judges major/minor/patch, you confirm. Suggests by default; never bumps silently unless you set auto.",
+      "description": "Sizes each commit (patch, minor, or major) and remembers the largest, then applies one version bump when you release. The model judges the size; you confirm. Suggests by default; set auto to apply without asking.",
       "category": "productivity"
     }
   ]

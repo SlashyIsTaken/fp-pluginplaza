@@ -20,10 +20,47 @@ stay quiet instead of erroring.
 
 ## Plugins
 
-| Plugin | What it does |
-|---|---|
-| [**fp-honesty**](./plugins/fp-honesty) | Tags load-bearing claims with their basis — verified / inferred / recalled / guess — and ends each response with a one-line tally. Pure annotation to give the user an idea of how many claims are actually grounded, because AI will always represent its findings with a confident tone. It never changes what the model does. |
-| [**fp-bump**](./plugins/fp-bump) | Sizes a SemVer version bump to the magnitude of your changes at commit time — the model judges major / minor / patch, you confirm. Suggests by default; never bumps silently unless you set `auto`. Control with `/fp-bump:mode`. |
+<details open>
+<summary><b>fp-honesty</b>: see how much of an answer is grounded vs. guessed</summary>
+
+Models state guesses and facts in the same confident tone.
+[fp-honesty](./plugins/fp-honesty) tags every load-bearing claim with its basis,
+so you can tell at a glance how much of an answer is actually grounded.
+
+- **Four levels:** 🟢 verified · 🟡 inferred · 🟠 recalled · 🔴 guess. Each tag
+  sits inline next to the claim it applies to, and the response ends with a
+  one-line `basis:` tally.
+- **A backstop hook** checks each `verified` tag against the tools the model
+  actually used that turn, so the grade can't be inflated.
+- **Pure annotation.** It reports how grounded a claim is and changes nothing
+  else. It never adds caveats, hedging, or extra caution because of a tag.
+- **Modes:** `full` (inline tags and a tally), `footer` (tally only), `off`.
+  Control with `/fp-honesty:mode`.
+
+</details>
+
+<details>
+<summary><b>fp-bump</b>: size the version bump to the change, applied when you release</summary>
+
+[fp-bump](./plugins/fp-bump) keeps a project's version in step with the size of
+its changes. It separates two things most tools combine: sizing a change, which
+happens as you commit, and bumping the version, which happens once, when you
+release.
+
+- **Sizes each commit.** When you commit, fp-bump asks the model to read the
+  staged diff and rate it patch, minor, or major. This only records the rating;
+  it does not change the version yet.
+- **Keeps a running level.** Ratings add up and the largest one wins, so ten
+  small commits still come to a single pending bump, not ten of them.
+- **Bumps once, at release.** When you run `/fp-bump:release` (or say "cut a
+  release"), the pending level becomes one version change and the ledger resets.
+- **Finds the version anywhere:** `package.json`, `pyproject.toml`, `Cargo.toml`,
+  `VERSION`, or `version.txt`.
+- **Modes:** `suggest` (propose and confirm, the default), `auto` (apply
+  directly), `off`. Control with `/fp-bump:mode`. It works on commits made
+  through Claude Code.
+
+</details>
 
 ## How it's built
 

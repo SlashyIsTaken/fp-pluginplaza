@@ -1,5 +1,5 @@
 ---
-description: fp-bump control — show status or switch mode (status/suggest/auto/off/help)
+description: fp-bump control — show mode and pending release, or switch mode (status/suggest/auto/off/help)
 argument-hint: [status|suggest|auto|off|help]
 allowed-tools: Bash(node:*)
 ---
