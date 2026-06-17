@@ -7,3 +7,6 @@ node_modules/
 # local plugin state (per-project flarepoint dirs)
 .flarepoint/
 .claude/settings.local.json
+
+# private design scratchpad — not published
+plugin-ideas.md
