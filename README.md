@@ -23,8 +23,7 @@ stay quiet instead of erroring.
 | Plugin | What it does |
 |---|---|
 | [**fp-honesty**](./plugins/fp-honesty) | Tags load-bearing claims with their basis — verified / inferred / recalled / guess — and ends each response with a one-line tally. Pure annotation to give the user an idea of how many claims are actually grounded, because AI will always represent its findings with a confident tone. It never changes what the model does. |
-
-_More on the way (a version-bumper, memory, profiles, …)._
+| [**fp-bump**](./plugins/fp-bump) | Sizes a SemVer version bump to the magnitude of your changes at commit time — the model judges major / minor / patch, you confirm. Suggests by default; never bumps silently unless you set `auto`. Control with `/fp-bump:mode`. |
 
 ## How it's built
 
