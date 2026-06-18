@@ -3,8 +3,16 @@
 The **fp** marketplace, hosted at
 [`SlashyIsTaken/fp-pluginplaza`](https://github.com/SlashyIsTaken/fp-pluginplaza).
 
-A plaza of small, **behavioural** Claude Code plugins: tools that make the AI's
-epistemic state explicit and persistent, without ever steering what it decides.
+A plaza of small, **behavioural** Claude Code plugins. They come in two families,
+and both intervene only at the *edges* of a task — before it or after it, never
+mid-reasoning:
+
+- **Behavioral** — surface and persist the AI's state, changing nothing about
+  what it decides (`fp-honesty`, `fp-bump`, `fp-recap`).
+- **Influential** — shape *how* the model approaches a task, but only by setting
+  a prior at the task edge that you've consented to (`fp-barbeque`).
+
+The invariant the whole plaza keeps: **never steer the model mid-reason.**
 
 The whole plaza installs as one Claude Code marketplace. Every plugin carries the
 `fp-` prefix (for **F**lare**p**oint) and lives in its own directory under
@@ -24,7 +32,9 @@ stay quiet instead of erroring.
 
 ## Plugins
 
-<details open>
+### Behavioral: Surface, never steer
+
+<details>
 <summary><b>fp-honesty</b>: see how much of an answer is grounded vs. guessed</summary>
 
 Models state guesses and facts in the same confident tone.
@@ -86,6 +96,36 @@ survives, so your next session opens with where you left off and what comes next
 - **Modes:** `on` (concise note, the default), `verbose` (more files and commands,
   plus files read), `off`. Control with `/fp-recap:mode`. It proposes the next
   steps and waits; it never starts work on its own.
+
+</details>
+
+### Influential: Shape how a task is approached, at its edge
+
+<details>
+<summary><b>fp-barbeque</b>: get grilled toward mutual understanding before code is written</summary>
+
+Used to its fullest, AI writes code faster than you can absorb it — and code you
+can't reason about, debug, or defend is close to useless.
+[fp-barbeque](./plugins/fp-barbeque) keeps you in the loop on the tasks where
+that matters: on exploratory work it has the model grill you toward mutual
+understanding *before* it builds, so the scope is yours to check or hold back and
+the result is yours to own.
+
+- **Fires on exploratory tasks.** Refactors, design and architecture decisions,
+  features with fuzzy scope, anything ambiguous. The model decides whether a task
+  qualifies; trivial, mechanical, or already-specified work is built straight away.
+- **Grills toward *your* understanding.** It surfaces the real forks and
+  tradeoffs, states the scope explicitly, and prefers the option-dialog over
+  open-ended questions — aiming for you to understand the approach well enough to
+  debug and own it, not just for the model to feel confident.
+- **The model judges convergence.** When understanding is mutual it recaps the
+  agreed scope in one line and proceeds. The recap is the handshake; push back on
+  it and it keeps grilling.
+- **An edge prior, not a gate.** Its whole footprint is one prior set at the
+  start of a task. It never blocks a tool, never interjects mid-solve, never
+  watches the conversation after.
+- **Modes:** `on` (grill first, the default — installing it is the opt-in),
+  `off` (build straight away). Control with `/fp-barbeque:mode`.
 
 </details>
 
