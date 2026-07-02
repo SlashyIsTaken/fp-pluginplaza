@@ -1,0 +1,9 @@
+{
+  "name": "fp-minify",
+  "description": "Comment-concision mode. Shapes the code the model writes so comments earn their place — a non-obvious why, or meaning a name can't hold (config, units, constraints) — and stay short; backstory goes to the commit. API docstrings are exempt. Sets a prior at the task edge; never steers mid-solve. Modes: off, new, tidy (default). Plus /fp-minify:strip for deliberate bulk de-commenting.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Flarepoint",
+    "url": "https://github.com/SlashyIsTaken"
+  }
+}

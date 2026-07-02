@@ -129,6 +129,31 @@ the result is yours to own.
 
 </details>
 
+<details>
+<summary><b>fp-minify</b>: comments that earn their place, kept short</summary>
+
+Model-written code is often excellent but over-commented — inline essays that
+restate what the code plainly does, or paragraph backstories that belong in a
+commit message. [fp-minify](./plugins/fp-minify) sets a prior so comments **earn
+their place**, and only ever touches comments — never what the code does.
+
+- **A comment must carry what the code can't.** A non-obvious *why* (so a reader
+  won't "fix" it back), or meaning a name can't hold (config values, magic
+  numbers, units, invariants, constraints). Earned comments stay self-contained
+  and short; deep backstory goes to the commit message, not the code.
+- **Docstrings are exempt.** JSDoc/TSDoc, Python docstrings, and godoc are caller
+  contracts and stay — but a doc-*position* essay that's really inline narration
+  still gets trimmed.
+- **Modes:** `tidy` (the default — shape new comments *and* tidy comments inside a
+  block being edited, never a drive-by rewrite elsewhere), `new` (only
+  newly-written comments; leave existing ones alone), `off`. Control with
+  `/fp-minify:mode`.
+- **Bulk cleanup on demand.** `/fp-minify:strip [target]` runs a deliberate pass
+  over a file, dir, or the current focus — showing what it'll remove before
+  deleting a lot at once.
+
+</details>
+
 ## How it's built
 
 ```

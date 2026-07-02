@@ -30,6 +30,12 @@
       "source": "./plugins/fp-barbeque",
       "description": "Understanding-first mode. On exploratory tasks (refactors, design, ambiguous scope) the model grills you toward mutual understanding before writing code, so you can debug and own the result. Sets a prior at the task edge and skips trivial work; never steers mid-solve. Modes: off, on (default).",
       "category": "productivity"
+    },
+    {
+      "name": "fp-minify",
+      "source": "./plugins/fp-minify",
+      "description": "Comment-concision mode. Shapes the code the model writes so comments earn their place — a non-obvious why, or meaning a name can't hold (config, units, constraints) — and stay short; deep backstory goes to the commit. API docstrings are exempt. Sets a prior at the task edge; only ever touches comments, never behavior. Modes: off, new, tidy (default). Plus /fp-minify:strip for deliberate bulk de-commenting.",
+      "category": "productivity"
     }
   ]
 }
