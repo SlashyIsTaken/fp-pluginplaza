@@ -37,6 +37,10 @@ function get(plugin, opts) {
   return current;
 }
 
+// A mode is a durable user preference, so it persists to the global config by
+// default — never the repo's .flarepoint, which would land in the working tree.
+// The read precedence (env > project > global) still honors an explicit
+// per-repo override, so passing scope:'project' remains available.
 function set(plugin, level, opts = {}) {
   const reg = registry.get(plugin);
   if (reg && !reg.levels.has(level)) {
@@ -44,7 +48,7 @@ function set(plugin, level, opts = {}) {
       `mode.set(${plugin}): "${level}" not a known level (${[...reg.levels].join(', ')})`,
     );
   }
-  return config.set(plugin, 'mode', level, opts);
+  return config.set(plugin, 'mode', level, { scope: 'global', ...opts });
 }
 
 function isActive(plugin, opts) {

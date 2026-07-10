@@ -4,13 +4,7 @@
 // deterministic (no model round-trip) — the command surfaces this line directly.
 //   node cli.js [status | show | off | footer | full | on | review | help]
 
-const { base, PLUGIN } = require('./honesty');
-const path = require('path');
-
-function flagFile() {
-  const dir = base.state.storeDir(PLUGIN, { scope: 'project', sharing: 'personal' });
-  return path.join(dir, 'audit-flag.json');
-}
+const { base, PLUGIN, flagFile } = require('./honesty');
 
 const HELP = [
   'fp-honesty control (/fp-honesty:mode <arg>):',

@@ -2,6 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
 const { sandbox } = require('./helpers');
 const config = require('../src/config');
 const mode = require('../src/mode');
@@ -24,6 +25,17 @@ test('env override beats files', (t) => {
   config.set('honesty', 'mode', 'footer', { scope: 'project', start: sb.start });
   process.env.FLAREPOINT_HONESTY_MODE = 'full';
   assert.equal(config.get('honesty', 'mode', 'off', { start: sb.start }), 'full');
+});
+
+test('mode.set persists to global, never the project .flarepoint', (t) => {
+  const sb = sandbox();
+  t.after(sb.cleanup);
+  mode.define('honesty', { levels: ['footer', 'full'], default: 'full' });
+
+  mode.set('honesty', 'footer', { start: sb.start });
+  assert.equal(mode.get('honesty', { start: sb.start }), 'footer');
+  assert.equal(fs.existsSync(config.projectConfigFile(sb.start)), false); // stayed out of the repo
+  assert.equal(fs.existsSync(config.globalConfigFile()), true);
 });
 
 test('mode validates against declared levels', (t) => {
