@@ -1,0 +1,9 @@
+{
+  "name": "fp-sicem",
+  "description": "Readable-prose mode. In the prose the model writes (READMEs, docs, markdown, PR and commit bodies) it defaults the em-dash out of existence, replacing it and its cousins (semicolon, colon-as-drama, long dash-parentheticals) with clear connectors that read well for every English reader, non-native ones included. Clearer and cleaner, never dumbed down. Prose artifacts only; not chat, not code, not code comments. Sets a prior at the task edge; never steers mid-solve. Modes: off, on (default).",
+  "version": "0.1.0",
+  "author": {
+    "name": "Flarepoint",
+    "url": "https://github.com/SlashyIsTaken"
+  }
+}

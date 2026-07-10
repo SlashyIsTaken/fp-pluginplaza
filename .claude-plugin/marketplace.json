@@ -24,6 +24,12 @@
       "source": "./plugins/fp-minify",
       "description": "Comment-concision mode. Shapes the code the model writes so comments earn their place — a non-obvious why, or meaning a name can't hold (config, units, constraints) — and stay short; deep backstory goes to the commit. API docstrings are exempt. Sets a prior at the task edge; only ever touches comments, never behavior. Modes: off, new, tidy (default). Plus /fp-minify:strip for deliberate bulk de-commenting.",
       "category": "productivity"
+    },
+    {
+      "name": "fp-sicem",
+      "source": "./plugins/fp-sicem",
+      "description": "Readable-prose mode (\"sic 'em-dash\"). In the prose the model writes (READMEs, docs, markdown, PR and commit bodies) it defaults the em-dash out of existence, replacing it and its cousins (semicolon, colon-as-drama, long dash-parentheticals) with clear connectors that read well for every English reader, non-native ones included. Clearer and cleaner, never dumbed down. Prose artifacts only; not chat, not code, not code comments (fp-minify's turf). Sets a prior at the task edge; never steers mid-solve. Modes: off, on (default).",
+      "category": "productivity"
     }
   ]
 }
