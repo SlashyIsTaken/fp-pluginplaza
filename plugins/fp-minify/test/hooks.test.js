@@ -29,7 +29,7 @@ test('inject is silent off, framed and substantive on tidy', () => {
   assert.match(tidy, /^<fp:minify mode=tidy>/);
   assert.match(tidy, /keep code comments concise/i);
   assert.match(tidy, /Why, not what/);
-  assert.match(tidy, /self-contained and short/);
+  assert.match(tidy, /Default to a SINGLE self-contained line/);
   assert.match(tidy, /commit message/);
   assert.match(tidy, /JSDoc\/TSDoc, docstrings, godoc/);
   assert.match(tidy, /never changes what the code does/);

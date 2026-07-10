@@ -10,14 +10,8 @@
 //      backstop left from last turn.
 // Output goes to stdout, which Claude Code adds to the prompt context.
 
-const { base, PLUGIN, RULES } = require('./honesty');
+const { base, PLUGIN, RULES, flagFile } = require('./honesty');
 const fs = require('fs');
-const path = require('path');
-
-function flagFile() {
-  const dir = base.state.storeDir(PLUGIN, { scope: 'project', sharing: 'personal' });
-  return path.join(dir, 'audit-flag.json');
-}
 
 // Matches an explicit directive at the START of the prompt, so a passing mention
 // of "fp-honesty" mid-sentence never flips the mode. The "/", "@" or "$" prefix

@@ -1,9 +1,0 @@
-{
-  "name": "fp-bump",
-  "description": "Sizes each commit (patch, minor, or major) and remembers the largest, then applies one version bump when you release. The model judges the size; you confirm. Suggests by default; set auto to apply without asking.",
-  "version": "0.2.0",
-  "author": {
-    "name": "Flarepoint",
-    "url": "https://github.com/SlashyIsTaken"
-  }
-}

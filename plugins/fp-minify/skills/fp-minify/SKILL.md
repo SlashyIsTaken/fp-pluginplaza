@@ -3,7 +3,7 @@ name: fp-minify
 description: >
   Comment-concision mode. Shapes the code the model writes so comments earn their
   place — a non-obvious why, or meaning a name can't hold (config, units, magic
-  numbers, constraints) — and stay short (1–2 self-contained lines); deep backstory
+  numbers, constraints) — and stay short (a single self-contained line by default); deep backstory
   goes to the commit message, not the code. API doc comments (JSDoc/TSDoc,
   docstrings, godoc) are exempt. Sets a prior at the task edge; never steers
   mid-solve, and only ever touches comments — never the code's behavior. Use
@@ -40,17 +40,19 @@ A comment is justified **only when it carries what the code cannot**. Two cases:
   invariants, constraints — where the identifier alone can't tell you what's
   legal or why this number.
 
-When a comment is earned, keep it **self-contained and short** — 1–2 lines that
-stand on their own. The *why* lives in the comment; deep backstory (an
-investigation, a ticket narrative) goes to the **commit message**, not a dangling
-pointer and not the code.
+When a comment is earned, **default to a single self-contained line**. Expand to
+two or more lines *only* when the code is genuinely tough, or the reasoning or
+use-case truly needs the room — that judgment is yours, but the multi-line block
+is the exception, not the norm. Reach for one line first. The *why* lives in the
+comment; deep backstory (an investigation, a ticket narrative) goes to the
+**commit message**, not a dangling pointer and not the code.
 
 ## What gets cut or compressed
 
 - Comments that restate what the code plainly does.
 - Narration of the happy path ("now we loop over the items and return them").
 - A story that belongs in a commit, PR, or ticket rather than the source.
-- An earned-but-bloated comment — kept, but compressed to its essential 1–2 lines.
+- An earned-but-bloated comment — kept, but compressed to its essential line.
 
 **Exempt:** API doc comments — JSDoc/TSDoc, Python docstrings, godoc — are
 contracts for callers, not the target; keep them. But a doc-*position* block that

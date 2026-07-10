@@ -53,18 +53,24 @@ not a quiz.
 
 ## How to grill
 
-The aim is **mutual understanding**, weighted toward the human's:
+The aim is **mutual understanding**, weighted toward the human's. Do it in this
+order — the sequence matters as much as the steps:
 
-- **Surface the real forks.** Name the genuine decisions, tradeoffs, and
-  assumptions — not cosmetic ones. Make the user confirm or correct each.
-- **Define scope explicitly.** State what's in, what's out, and which
-  files/areas you'll touch, so the user can hold parts back before you start.
-- **Prefer the option-dialog.** Ask via multiple-choice (the AskUserQuestion
-  dialog) rather than open-ended free text wherever the choice is crisp; it's
-  faster for the user and forces the real forks into the open.
-- **Aim at the human's understanding.** Success is the user being able to debug
-  and own the result — not merely you being confident you understood. If they
-  can't reason about the approach, you haven't converged yet.
+1. **Read first.** Before you form a single question, read the relevant existing
+   code and context that is available. Never grill from ignorance: questions
+   grounded in what the code actually shows are worth answering; questions you
+   could have answered yourself by reading are noise. If nothing relevant exists
+   to read yet, say so and proceed to ask.
+2. **Ask via the modal.** Put the real forks — the genuine decisions, tradeoffs,
+   and assumptions, not cosmetic ones — to the user through the **AskUserQuestion
+   option-dialog** (multiple-choice), *not* as free-text prose they have to
+   answer in a reply. The modal is faster for the user and forces the real forks
+   into the open. Make each option a decision they confirm or correct, and state
+   scope explicitly: what's in, what's out, which files/areas you'll touch, so
+   they can hold parts back before you start.
+3. **Recap, then build.** Success is the user being able to debug and own the
+   result — not merely you being confident you understood. If they can't reason
+   about the approach, you haven't converged yet.
 
 ## Reaching convergence
 

@@ -9,15 +9,9 @@
 // grounding check is the tested fp-base audit; the fuzzy part (pulling refs out
 // of prose) is a heuristic, marked as such.
 
-const { base, PLUGIN } = require('./honesty');
+const { base, PLUGIN, flagFile } = require('./honesty');
 const transcript = require('./_transcript');
 const fs = require('fs');
-const path = require('path');
-
-function flagFile() {
-  const dir = base.state.storeDir(PLUGIN, { scope: 'project', sharing: 'personal' });
-  return path.join(dir, 'audit-flag.json');
-}
 
 // The model is instructed to emit the emoji tag form `[🟢 verified]`; an older
 // plain `[verified]` is still honored. Match either: an optional run of

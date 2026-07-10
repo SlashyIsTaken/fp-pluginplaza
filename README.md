@@ -8,7 +8,7 @@ and both intervene only at the *edges* of a task — before it or after it, neve
 mid-reasoning:
 
 - **Behavioral** — surface and persist the AI's state, changing nothing about
-  what it decides (`fp-honesty`, `fp-bump`, `fp-recap`).
+  what it decides (`fp-honesty`).
 - **Influential** — shape *how* the model approaches a task, but only by setting
   a prior at the task edge that you've consented to (`fp-barbeque`).
 
@@ -50,52 +50,6 @@ so you can tell at a glance how much of an answer is actually grounded.
   else. It never adds caveats, hedging, or extra caution because of a tag.
 - **Modes:** `full` (inline tags and a tally), `footer` (tally only), `off`.
   Control with `/fp-honesty:mode`.
-
-</details>
-
-<details>
-<summary><b>fp-bump</b>: size the version bump to the change, applied when you release</summary>
-
-[fp-bump](./plugins/fp-bump) keeps a project's version in step with the size of
-its changes. It separates two things most tools combine: sizing a change, which
-happens as you commit, and bumping the version, which happens once, when you
-release.
-
-- **Sizes each commit.** When you commit, fp-bump asks the model to read the
-  staged diff and rate it patch, minor, or major. This only records the rating;
-  it does not change the version yet.
-- **Keeps a running level.** Ratings add up and the largest one wins, so ten
-  small commits still come to a single pending bump, not ten of them.
-- **Bumps once, at release.** When you run `/fp-bump:release` (or say "cut a
-  release"), the pending level becomes one version change and the ledger resets.
-- **Finds the version anywhere:** `package.json`, `pyproject.toml`, `Cargo.toml`,
-  `VERSION`, or `version.txt`.
-- **Modes:** `suggest` (propose and confirm, the default), `auto` (apply
-  directly), `off`. Control with `/fp-bump:mode`. It works on commits made
-  through Claude Code.
-
-</details>
-
-<details>
-<summary><b>fp-recap</b>: resume a previous session, with the steps ahead laid out</summary>
-
-[fp-recap](./plugins/fp-recap) is about picking a session back up. The built-in
-summary is one-off prose that disappears; fp-recap saves a resume note that
-survives, so your next session opens with where you left off and what comes next.
-
-- **Captures where you left off.** After each response, fp-recap reads the
-  session's tool log and saves a short, structured note: the goal you set, the
-  files changed, and the commands run.
-- **Lays out the steps ahead.** It also captures the likely next moves, taken
-  from what you said you'd do next, or your last unfinished request as the anchor
-  to continue from.
-- **Resumes next time.** At the first prompt of your next session in that
-  project, the note is surfaced once, so you can carry on without re-explaining.
-- **Stays local.** The note lives in the project's git-ignored personal store, as
-  a readable file. Ask for it any time with `/fp-recap:mode show`.
-- **Modes:** `on` (concise note, the default), `verbose` (more files and commands,
-  plus files read), `off`. Control with `/fp-recap:mode`. It proposes the next
-  steps and waits; it never starts work on its own.
 
 </details>
 

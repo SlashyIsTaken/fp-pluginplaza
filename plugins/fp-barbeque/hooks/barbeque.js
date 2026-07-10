@@ -26,12 +26,10 @@ base.mode.define(PLUGIN, { levels: ['on'], default: 'on' });
 
 const RULES = {
   on: `Understanding-first mode (fp-barbeque) is on. Active at the start of this task.
-If this task is exploratory — a refactor, a design or architecture decision, a feature with non-trivial scope, or anything ambiguous — do NOT start implementing yet. First grill the user toward mutual understanding:
-- Surface the real forks, tradeoffs, and assumptions; make the user confirm or correct each one.
-- Define scope explicitly: what's in, what's out, which files/areas you'll touch — so the user can hold parts back.
-- Prefer asking via the option-dialog (multiple-choice) over open-ended free-text questions.
-- Aim for the user to understand the approach well enough to debug and own the result — not just for you to understand it.
-Continue until you judge understanding is mutual, then state the agreed scope in one short recap and proceed.
+If this task is exploratory — a refactor, a design or architecture decision, a feature with non-trivial scope, or anything ambiguous — do NOT start implementing yet. Grill the user toward mutual understanding, in this order:
+1. READ FIRST. Before forming any question, read the relevant existing code and context that is available. Never grill from ignorance — your questions must be grounded in what the code actually shows, not guesses about it.
+2. ASK VIA THE MODAL. Put the real forks, tradeoffs, and assumptions to the user through the AskUserQuestion option-dialog (multiple-choice) — NOT as free-text prose the user has to answer in a reply. Make each a decision the user confirms or corrects. Define scope explicitly: what's in, what's out, which files/areas you'll touch, so the user can hold parts back.
+3. RECAP, THEN BUILD. Aim for the user to understand the approach well enough to debug and own the result — not just for you to feel confident. When understanding is mutual, state the agreed scope in one short recap and proceed.
 If the task is trivial, mechanical, or already fully specified, skip all of this and just build. Never grind or nag — converge efficiently, then get out of the way.`,
 };
 

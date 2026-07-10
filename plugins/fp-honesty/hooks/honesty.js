@@ -5,6 +5,10 @@
 // inject hook pushes each turn. The detailed authoritative version lives in
 // skills/fp-honesty/SKILL.md; this is the terse enforcement copy.
 
+const os = require('os');
+const path = require('path');
+const crypto = require('crypto');
+
 function loadBase() {
   try {
     return require('./_fpbase'); // production: bundled into the plugin
@@ -15,6 +19,16 @@ function loadBase() {
 
 const base = loadBase();
 const PLUGIN = 'honesty';
+
+// Cross-turn backstop flag, kept OUT of the user's repo. It once lived in
+// <repo>/.flarepoint and got accidentally committed; a per-project file under
+// the OS temp dir avoids the working tree entirely. One-turn signal, so losing
+// it on reboot is harmless.
+function flagFile(start) {
+  const root = base.config.paths(start).projectRoot;
+  const key = crypto.createHash('sha256').update(root).digest('hex').slice(0, 16);
+  return path.join(os.tmpdir(), 'flarepoint-honesty', `${key}-audit-flag.json`);
+}
 
 base.mode.define(PLUGIN, { levels: ['footer', 'full'], default: 'full' });
 
@@ -32,4 +46,4 @@ ${COMMON}
 Do NOT add inline tags. Instead, end the response with one footer line tallying the basis of the load-bearing claims you made: "basis: 🟢 N verified · 🟡 M inferred · …" (each level with its emoji). No load-bearing claims → no footer.`,
 };
 
-module.exports = { base, PLUGIN, RULES, loadBase };
+module.exports = { base, PLUGIN, RULES, loadBase, flagFile };

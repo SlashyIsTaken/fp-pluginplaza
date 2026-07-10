@@ -1,9 +1,0 @@
-{
-  "name": "fp-recap",
-  "description": "Resume a previous session. Saves a structured note of where you left off (goal, files changed, commands run) plus the likely steps ahead, and surfaces it at the start of the next session so you can continue without re-explaining. It proposes the next steps and waits; it never starts work on its own.",
-  "version": "0.1.0",
-  "author": {
-    "name": "Flarepoint",
-    "url": "https://github.com/SlashyIsTaken"
-  }
-}

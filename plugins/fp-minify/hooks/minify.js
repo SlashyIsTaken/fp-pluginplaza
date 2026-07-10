@@ -28,7 +28,7 @@ base.mode.define(PLUGIN, { levels: ['new', 'tidy'], default: 'tidy' });
 const DOCTRINE = `A comment earns its place only by carrying what the code cannot:
 - Why, not what — the reason for something non-obvious or deliberately odd, so a later reader won't "fix" it back.
 - Meaning a name can't hold — config values, magic numbers, units, ranges, invariants, constraints.
-Write earned comments self-contained and short (1–2 lines). Keep the why in the comment; send deep backstory (investigations, ticket narratives) to the commit message, not the code.
+Default to a SINGLE self-contained line. Expand to two or more lines ONLY when the code is genuinely tough, or the reasoning/use-case truly needs the room — that judgment is yours, and the multi-line case is the exception, not the norm. Keep the why in the comment; send deep backstory (investigations, ticket narratives) to the commit message, not the code.
 Cut or compress anything that restates what the code plainly does, narrates the happy path, or tells a story that belongs in a commit, PR, or ticket.
 Exempt: API doc comments — JSDoc/TSDoc, docstrings, godoc — are contracts for callers; keep them. But a doc-position block that is really inline narration still gets trimmed.`;
 
